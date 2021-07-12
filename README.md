@@ -41,10 +41,68 @@ Overview of Generative Adversarial Networks techniques.
 - [The Adversarial Network](#adver_net)
 - [GAN Training](#gan_train)
 
-
 - [Setup Instructions](#Setup_Instructions)
 - [Acknowledgments](#Acknowledgments)
 - [Further Links](#Further_Links)
+
+
+# Essential GAN Theory <a id="esent_gan"></a>
+Two Deep Learning networks in competition: 
+- **Generator** vs. **Discriminator**
+- **Generator**: generates imitations or counterfeits (of images). It tries to transform random noise as input into a real looking image.
+- **Discriminator**: tries to distiguish between real and fake images
+
+During Training: Both models compete against each other.
+- Generator gets better and better in producing real looking images
+- Discriminator gets better and better in distiguishing between real and fake images.
+
+Goal:
+- Generator creates images which will be identified as real images by the Discriminator
+
+    ![image1]
+    S.316, Abb 12-1
+
+### Discriminator Training
+- **Generator**: 
+    - creates imitations of images.
+    - only inferences (only feed forward, no backpropagation).
+- **Discriminator**:
+    - uses information from Generator.
+    - **learns** to distinguish fake from real images.
+
+    ![image2]
+    S.317, Abb 12-2
+
+### Generator Training
+- **Discriminator**:
+    - judges the imitations of the Generator.
+    - only inferences (only feed forward, no backpropagation).
+- **Generator**: 
+    - uses information from Discriminator.
+    - **learns** to deceive better and better the Discriminator.
+    - Goal: Discriminator should classify fake images as real images.
+
+    ![image3]
+    S.318, Abb 12-3
+
+### Discriminator Training in detail: ONLY THE DISCRIMINATOR WILL LEARN
+- Generator produces fake images via inference (black). These fake images are shuffled with real images.
+- Discriminator makes a prediction (y_hat), if the image is real.
+- Loss calculation via cross entropy costs (comparison of prediction y_hat with label y).
+- Via Backpropagation-Tuning of the Discriminator's parameters costs will be minimized. Hence, the Discriminator model should get better to distinguish between real and fake images.
+
+### Generator Training in detail: ONLY THE GENERATOR WILL LEARN
+- Generator receives a random noise vector **z** as input and creates a fake image as output.
+- Those produced fake images will be passed on the Discriminator. IMPORTANT: The Generator lies to the Discriminator and declares its images with label=1 (real image).
+- Discriminator judges via inference (black), if those images are real or fake.
+- Loss calculation via cross entropy costs (comparison of prediction y_hat with label y) (green).
+- Via Backpropagation-Tuning of the Generator's parameters costs will be minimized. Hence, the Generator model should get better and better to produce real looking images.
+
+### At the end of the Training
+- Discriminator and Generator were trained via an interplay and each network is fully optimized for its own task.
+- We can discard the Discrimintor network now. The Generator network is our final product.
+- We can put in random noise and will get a real looking image.
+- We can put **special z-values** into the Generator (i.e. special coordinates in the latent room) to create images with special features (e.g. person with certain age, gender, person with glasses etc.)
 
 ## Setup Instructions <a id="Setup_Instructions"></a>
 The following is a brief set of instructions on setting up a cloned repository.
@@ -70,22 +128,21 @@ $ export PATH="/path/to/anaconda/bin:$PATH"
 - Change Directory to your project older, e.g. `cd my_github_projects`
 - Clone the Github Project inside this folder with Git Bash (Terminal) via:
 ```
-$ git clone https://github.com/ddhartma/Matrix-Math-with-Numpy.git
-```
+$ git clone https://github.com/ddhartma/Generative-Adversarial-Networks.git
 
 - Change Directory
 ```
-$ cd Matrix-Math-with-Numpy
+$ cd Generative-Adversarial-Networks
 ```
 
-- Create a new Python environment, e.g. matrix_op. Inside Git Bash (Terminal) write:
+- Create a new Python environment, e.g. gan. Inside Git Bash (Terminal) write:
 ```
-$ conda create --id matrix_op
+$ conda create --id gan
 ```
 
 - Activate the installed environment via
 ```
-$ conda activate matrix_op
+$ conda activate gan
 ```
 
 - Install the following packages (via pip or conda)
@@ -102,7 +159,7 @@ $ conda env list
 ```
 
 ## Acknowledgments <a id="Acknowledgments"></a>
-* This project is part of the Udacity Nanodegree program 'Deep Reinforcement Learning'. Please check this [link](https://www.udacity.com) for more information.
+* This project is part of the Udacity Nanodegree program 'Deep Learning'. Please check this [link](https://www.udacity.com) for more information.
 
 ## Further Links <a id="Further_Links"></a>
 
